@@ -14,6 +14,7 @@ class App extends React.Component
 		//inital state for when the app loads
 		this.addFishes=this.addFishes.bind(this);
 		this.loadSamples=this.loadSamples.bind(this);
+		this.addToOrder=this.addToOrder.bind(this);
 		this.state={
 			fishes: {},
 			orders: {},
@@ -32,10 +33,19 @@ class App extends React.Component
 		const fishes={...this.state.fishes}
 		//add new stuff to the state
 		const timestamp=Date.now();
+		//generates a key onclick
 		fishes[`fish-${timestamp}`]=fish;
 
 		//update the state
 		this.setState({fishes});
+	}
+
+	addToOrder(key)
+	{
+		const orders={...this.state.orders}
+		orders[key]=orders[key]+1 || 1;
+		//update the state
+		this.setState({orders});
 	}
 	render()
 	{
@@ -48,12 +58,12 @@ class App extends React.Component
 							{
 								Object
 									.keys(this.state.fishes)
-									.map(key=> <Fish key={key} details={this.state.fishes[key]}/>)
+									.map(key=> <Fish key={key} index={key} addToOrder={this.addToOrder} details={this.state.fishes[key]}/>)
 							}
 						</ul>
 					</div>
 
-					<Order />
+					<Order fishes={this.state.fishes} order={this.state.orders}/>
 					<Inventory addFish={this.addFishes} loadSamples={this.loadSamples}/>
 				</div>
 			);
